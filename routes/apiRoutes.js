@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const values = require("../db/values");
-const uuid {v1: uuidv1} = require('uuid')
-
+const { v4: uuidv4} = require('uuid')
+const myId = uuidv4();
 router.get('/notes' , (req,res) => {
     values.getNotes()
     .then((notes) =>{
@@ -11,14 +11,20 @@ router.get('/notes' , (req,res) => {
 });
 
 router.post ("/notes" , (req,res) => {
-    values.addNote()
-    .then((note) => res.json(note))
-    .catch((err) => res.status(500).json(err));
+    const newNote = {
+        id: uuidv4(),
+        title: req.body.title,
+        text: req.body.text
+    };
+
+    values.addNote(newNote)
+        .then((note) => res.json(note))
+        .catch((err) => res.status(500).json(err));
 });
 
 router.delete ("notes/:id", (req,res) => {
     values.removeNote(req.params.id)
-    then.(() => res.json({ok: true}))
+    .then(() => res.json({ok: true}))
     .catch((err) => res.status(500).json(err));
 });
 
