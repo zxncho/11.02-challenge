@@ -3,7 +3,7 @@ const values = require("../db/values");
 const { v4: uuidv4} = require('uuid')
 const myId = uuidv4();
 
-router.get('/notes' , (req,res) => {
+router.get('../public/notes' , (req,res) => {
     values.getNotes()
     .then((notes) =>{
         return(res.json(notes));
@@ -11,7 +11,7 @@ router.get('/notes' , (req,res) => {
     .catch((err) => res.status(500).json(err));
 });
 
-router.post ("/notes" , (req,res) => {
+router.post ('../public/notes', (req,res) => {
     const newNote = {
         id: uuidv4(),
         title: req.body.title,
@@ -23,7 +23,7 @@ router.post ("/notes" , (req,res) => {
         .catch((err) => res.status(500).json(err));
 });
 
-router.delete ("notes/:id", (req,res) => {
+router.delete ("../public/notes/:id", (req,res) => {
     values.removeNote(req.params.id)
     .then(() => res.json({ok: true}))
     .catch((err) => res.status(500).json(err));
