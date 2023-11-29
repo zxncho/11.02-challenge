@@ -11,6 +11,7 @@
   "dependencies": {
     "crypto": "^1.0.1",
     "express": "^4.16.4",
+    "jest": "^29.7.0",
     "nanoid": "^5.0.3",
     "path": "^0.12.7",
     "uuid": "^8.3.2"
