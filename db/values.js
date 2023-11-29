@@ -1,59 +1,49 @@
 const util = require('util');
 const fs = require('fs');
-
-// This package will be used to generate our unique ids. https://www.npmjs.com/package/uuid
-const uuidv1 = require('uuid/v1');
+const { v4: uuidv4 } = require('uuid');
 
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
-class Store {
+class Values {
   read() {
-    return readFileAsync('db/db.json', 'utf8');
+    return readFileAsync('db.json', 'utf8');
   }
 
-  write(note) {
-    return writeFileAsync('db/db.json', JSON.stringify(note));
+  write(values) {
+    return writeFileAsync('db.json', JSON.stringify(values));
   }
 
-  getNotes() {
-    return this.read().then((notes) => {
-      let parsedNotes;
-
-      // If notes isn't an array or can't be turned into one, send back a new empty array
-      try {
-        parsedNotes = [].concat(JSON.parse(notes));
-      } catch (err) {
-        parsedNotes = [];
-      }
-
-      return parsedNotes;
+  getValues() {
+    return this.read().then((values) => {
+      // Return the parsed values or an empty array if parsing fails
+      return [].concat(JSON.parse(values) || []);
     });
   }
 
-  addNote(note) {
-    const { title, text } = note;
+  addValue(value) {
+    const { key, data } = value;
 
-    if (!title || !text) {
-      throw new Error("Note 'title' and 'text' cannot be blank");
+    if (!key || !data) {
+      throw new Error("Value 'key' and 'data' cannot be blank");
     }
 
-    // Add a unique id to the note using uuid package
-    const newNote = { title, text, id: uuidv1() };
+    // Add a unique id to the value using uuid package
+    const newValue = { key, data, id: uuidv4() };
 
-    // Get all notes, add the new note, write all the updated notes, return the newNote
-    return this.getNotes()
-      .then((notes) => [...notes, newNote])
-      .then((updatedNotes) => this.write(updatedNotes))
-      .then(() => newNote);
+    // Get all values, add the new value, write all the updated values, return the newValue
+    return this.getValues()
+      .then((values) => [...values, newValue])
+      .then((updatedValues) => this.write(updatedValues))
+      .then(() => newValue);
   }
 
-  removeNote(id) {
-    // Get all notes, remove the note with the given id, write the filtered notes
-    return this.getNotes()
-      .then((notes) => notes.filter((note) => note.id !== id))
-      .then((filteredNotes) => this.write(filteredNotes));
+  removeValue(id) {
+    // Get all values, remove the value with the given id, write the filtered values
+    return this.getValues()
+      .then((values) => values.filter((value) => value.id !== id))
+      .then((filteredValues) => this.write(filteredValues));
   }
 }
 
-module.exports = new Store();
+module.exports = new Values();
