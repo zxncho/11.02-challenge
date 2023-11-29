@@ -2,6 +2,7 @@ const router = require("express").Router();
 const values = require("../db/values");
 const { v4: uuidv4} = require('uuid')
 const myId = uuidv4();
+
 router.get('/notes' , (req,res) => {
     values.getNotes()
     .then((notes) =>{

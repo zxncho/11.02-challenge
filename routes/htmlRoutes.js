@@ -1,5 +1,5 @@
 const path = require('path');
-const router = require('express').Router;
+const router = require('express').Router();
 const { v4: uuidv4 } = require('uuid');
 const myId = uuidv4();
 const fs = require('fs');
