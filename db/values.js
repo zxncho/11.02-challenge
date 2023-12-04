@@ -11,7 +11,7 @@ class Values {
   }
 
   write(values) {
-    return writeFileAsync('db.json', JSON.stringify(values));
+    return writeFileAsync('db.json', JSON.stringify(value));
   }
 
   getValues() {
