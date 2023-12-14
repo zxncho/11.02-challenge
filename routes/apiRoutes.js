@@ -3,7 +3,12 @@ const values = require("../db/values");
 const { v4: uuidv4} = require('uuid')
 const myId = uuidv4();
 
-router.get('/notes' , (req,res) => {
+
+// router.get("/notes", (req, res) => {
+//     res.sendFile(notesPath, { randomId });
+// });
+
+router.get('/notes' , (req,res) => { // GET http://localhost:3301/api/notes
      values
     .getValues()
     .then((values) =>{
@@ -13,14 +18,14 @@ router.get('/notes' , (req,res) => {
 });
 
 router.post ('/notes', (req,res) => {
-    values
-    // const newNote = {
-    //     id: uuidv4(),
-    //     title: req.body.title,
-    //     text: req.body.text
-    // };
+    values.addValue
+    const newNote = {
+        id: uuidv4(),
+        title: req.body.title,
+        text: req.body.text
+    };
 
-    .addValue(req.body)
+    addValue(req.body)
         .then((value) => res.json(value))
         .catch((err) => res.status(500).json(err));
 });
@@ -33,5 +38,6 @@ router.delete ("/notes/:id", (req,res) => {
 });
 
 module.exports = router;
+
 
 

@@ -7,7 +7,8 @@ const writeFileAsync = util.promisify(fs.writeFile);
 
 class Values {
   read() {
-    return readFileAsync('db.json', 'utf8');
+    console.log(__dirname, 'db.json');
+    return readFileAsync(__dirname + '/db.json', 'utf8');
   }
 
   write(values) {
@@ -15,6 +16,7 @@ class Values {
   }
 
   getValues() {
+    let value = ('db.json',JSON.stringify(value))
     return this.read().then((values) => {
       // Return the parsed values or an empty array if parsing fails
       return [].concat(JSON.parse(values) || []);
@@ -27,9 +29,6 @@ class Values {
     if (!key || !data) {
       throw new Error("Value 'key' and 'data' cannot be blank");
     }
-
-    // Add a unique id to the value using uuid package
-    const newValue = { key, data, id: uuidv4() };
 
     // Get all values, add the new value, write all the updated values, return the newValue
     return this.getValues()
