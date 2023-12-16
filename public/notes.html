@@ -13,45 +13,21 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="/assets/css/styles.css" />
-    
   </head>
 
   <body>
     <nav class="navbar bg-info">
       <a class="navbar-brand text-light p-3" href="/">Note Taker </a>
       <div class="icons">
-        <button class="btn">
-        <i class="fa-solid fa-floppy-disk text-dark"></i>Save</i>
-      </button>
-      <button class="btn">
-        <i class="fa-solid fa-plus text-dark"></i>
-      </button>
+        <i class="fas fa-save text-light save-note"></i>
+        <i class="fas fa-plus text-light new-note"></i>
       </div>
     </nav>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-4 list-container">
+        <div class="col-4 list-container" id="list-container">
           <div class="card">
-            <ul class="list-group">
-                <li>
-                    <strong>HTML</strong>: This note is about HTML
-                </li>
-            
-                <li>
-                    <strong>CSS</strong>: This note is about CSS
-                </li>
-            
-                <li>
-                    <strong>Node</strong>: This note is about Node
-                </li>
-            
-                <li>
-                    <strong>Express</strong>: This note is about Express
-                </li>
-            
-                <li>
-                    <strong>SQL</strong>: This note is about SQL
-                </li>
+            <ul class="list-group" id="list-group">
             </ul>
           </div>
         </div>
@@ -66,8 +42,6 @@
         </div>
       </div>
     </div>
-    <!-- <script src="../server.js"></script> -->
-    
-
+    <script src="/assets/js/index.js"></script>
   </body>
 </html>

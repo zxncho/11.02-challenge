@@ -1,6 +1,8 @@
 const util = require('util');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+// const { title } = require('process');
+// const { text } = require('express');
 
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
@@ -11,36 +13,45 @@ class Values {
     return readFileAsync(__dirname + '/db.json', 'utf8');
   }
 
-  write(values) {
-    return writeFileAsync('db.json', JSON.stringify(value));
+  write(note) {
+    return writeFileAsync('db.json', JSON.stringify(note));
   }
 
   getValues() {
-    let value = ('db.json',JSON.stringify(value))
-    return this.read().then((values) => {
-      // Return the parsed values or an empty array if parsing fails
-      return [].concat(JSON.parse(values) || []);
+    return this.read().then((notes) => {
+      let parsedNotes;
+
+      // If notes isn't an array or can't be turned into one, send back a new empty array
+      try {
+        parsedNotes = [].concat(JSON.parse(notes));
+      } catch (err) {
+        parsedNotes = [];
+      }
+
+      return parsedNotes;
     });
   }
 
-  addValue(value) {
-    const { key, data } = value;
+  addValue(note) {
+    const { title, text } = note;
 
-    if (!key || !data) {
-      throw new Error("Value 'key' and 'data' cannot be blank");
+    if (!title || !text) {
+      throw new Error("Value 'title' and 'text' cannot be blank");
     }
+
+    const newNote = { title, text, id: uuidv4() };
 
     // Get all values, add the new value, write all the updated values, return the newValue
     return this.getValues()
-      .then((values) => [...values, newValue])
+      .then((notes) => [...notes, newNote])
       .then((updatedValues) => this.write(updatedValues))
-      .then(() => newValue);
+      .then(() => newNote);
   }
 
   removeValue(id) {
     // Get all values, remove the value with the given id, write the filtered values
     return this.getValues()
-      .then((values) => values.filter((value) => value.id !== id))
+      .then((notes) => notes.filter((note) => note.id !== id))
       .then((filteredValues) => this.write(filteredValues));
   }
 }

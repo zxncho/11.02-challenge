@@ -4,7 +4,7 @@ let saveNoteBtn;
 let newNoteBtn;
 let noteList;
 
-if (window.location.pathname === './notes') {
+if (window.location.pathname === '/notes') {
   noteTitle = document.querySelector('.note-title');
   noteText = document.querySelector('.note-textarea');
   saveNoteBtn = document.querySelector('.save-note');
@@ -31,16 +31,18 @@ const getValues = () =>
     headers: {
       'Content-Type': 'application/json',
     },
-  });
+  }).then((response) => response.json());
 
-const saveValues = (value) =>
+
+  const saveValues = (note) =>
   fetch('/api/notes', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(value),
-  });
+    body: JSON.stringify(note),
+  }).then((response) => response.json());
+
 
 const removeValue = (id) =>
   fetch(`/api/notes/${id}`, {
@@ -72,7 +74,7 @@ const handleNoteSave = () => {
     text: noteText.value,
   };
   saveNote(newNote).then(() => {
-    getAndRenderNotes();
+    getValues();
     renderActiveNote();
   });
 };
@@ -89,8 +91,8 @@ const handleNoteDelete = (e) => {
     activeNote = {};
   }
 
-  deleteNote(noteId).then(() => {
-    getAndRenderNotes();
+  removeValue(noteId).then(() => {
+    getValues();
     renderActiveNote();
   });
 };
@@ -117,8 +119,8 @@ const handleRenderSaveBtn = () => {
 };
 
 // Render the list of note titles
-const renderNoteList = async (values) => {
-  let jsonValues = await values.json();
+const renderNoteList = async (notes) => {
+  let jsonValues = await notes.json();
   if (window.location.pathname === '/notes') {
     noteList.forEach((el) => (el.innerHTML = ''));
   }
@@ -158,9 +160,9 @@ const renderNoteList = async (values) => {
     noteListItems.push(createLi('No saved Notes', false));
   }
 
-  jsonValues.forEach((value) => {
-    const li = createLi(value.title);
-    li.dataset.note = JSON.stringify(value);
+  jsonValues.forEach((note) => {
+    const li = createLi(note.title);
+    li.dataset.note = JSON.stringify(note);
 
     noteListItems.push(li);
   });
