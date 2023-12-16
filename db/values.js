@@ -13,8 +13,8 @@ class Values {
     return readFileAsync(__dirname + '/db.json', 'utf8');
   }
 
-  write(note) {
-    return writeFileAsync('db.json', JSON.stringify(note));
+  write(notes) {
+    return writeFileAsync('db.json', JSON.stringify(notes));
   }
 
   getValues() {
@@ -34,12 +34,11 @@ class Values {
 
   addValue(note) {
     const { title, text } = note;
+    const newNote = { ...note, id: uuidv4() };
 
-    if (!title || !text) {
+    if (!newNote.title || !newNote.text) {
       throw new Error("Value 'title' and 'text' cannot be blank");
     }
-
-    const newNote = { title, text, id: uuidv4() };
 
     // Get all values, add the new value, write all the updated values, return the newValue
     return this.getValues()
