@@ -1,3 +1,4 @@
+
 let noteTitle;
 let noteText;
 let saveNoteBtn;
@@ -34,14 +35,18 @@ const getValues = () =>
   }).then((response) => response.json());
 
 
-  const saveValues = (note) =>
+  const addValue = (note) =>
   fetch('/api/notes', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(note),
+    body: JSON.stringify({
+      title: note.title,  
+      text: note.text,   
+    }),
   }).then((response) => response.json());
+
 
 
 const removeValue = (id) =>
@@ -73,7 +78,7 @@ const handleNoteSave = () => {
     title: noteTitle.value,
     text: noteText.value,
   };
-  saveNote(newNote).then(() => {
+  saveValues(newNote).then(() => {
     getValues();
     renderActiveNote();
   });
@@ -120,7 +125,7 @@ const handleRenderSaveBtn = () => {
 
 // Render the list of note titles
 const renderNoteList = async (notes) => {
-  let jsonValues = await notes.json();
+  let jsonValues = await db.json();
   if (window.location.pathname === '/notes') {
     noteList.forEach((el) => (el.innerHTML = ''));
   }
@@ -173,7 +178,7 @@ const renderNoteList = async (notes) => {
 };
 
 // Gets notes from the db and renders them to the sidebar
-const getAndRenderNotes = () => getValues().then(renderNoteList);
+const getAndRenderNotes = () => addValue().then(renderNoteList);
 
 if (window.location.pathname === '/notes') {
   saveNoteBtn.addEventListener('click', handleNoteSave);
