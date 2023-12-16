@@ -3,7 +3,7 @@ const router = require('express').Router();
 // const { v4: uuidv4 } = require('uuid');
 // const randomId = uuidv4();
 // const fs = require('fs');
-// const notesPath = path.join(__dirname,"../db/db.json")
+// const notesPath = path.join(__dirname, "../db/db.json");  // Update this line
 
 // router.get("/api/randomId", (req, res) => {
 //     // Generate a random ID using uuidv4 and send it as JSON
@@ -11,14 +11,13 @@ const router = require('express').Router();
 //     res.json({ randomId });
 // });
 
-router.get("/notes", (req,res) => {
-    res.sendFile(path.join(__dirname, "../public/notes.html"), {randomId});
-    return this;
+
+router.get("/notes", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/notes.html"));
 });
 
-router.get("*", (req,res) => {
+router.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../public/index.html"));
-    return this;
 });
 
 module.exports = router;
